@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Distance and Angle Calculator</title>
+        <style>
+        /* Add your CSS styling here */
+        </style>
+    </head>
+    <body>
+        <h1>Distance and Angle Calculator</h1>
+        <label for="calculationType">Select Calculation Type:</label>
+        <select id="calculationType"> 
+        <option value="distance">Distance</option>
+        <option value="angle">Angle</option>
+        </select>
+        <br />
+        <label for="residueNumber">Select Residue Number:</label>
+        <select id="residueNumber">
+        <!-- Residue options will be populated dynamically -->
+
+        </select>
+        <br />
+        
+        <label for="residueNumber">Select Number:</label>
+        <select id="residueNumber">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        </select>
+
+
+<br>
+        <label for="atomName">Select Atom Name:</label>
+        <select id="atomName">
+            <option value="C">C</option>
+            <option value="N">N</option>
+        <!-- Atom options will be populated dynamically -->
+        </select>
+        <br />
+        <button id="calculateButton">Calculate</button>
+
+        <div id="result">
+        <!-- Calculated result will be displayed here -->
+        </div>
+
+        <script>
+        // JavaScript code goes here
+
+        // Sample residue and atom data (you can replace this with your data)
+        const residueData = [
+            { number: 1, atoms: ["1","2","3"] },
+            { number: 2, atoms: ["1", "2", "3"] },
+            { number: 3, atoms: ["1", "2", "3"] }
+            // Add more residue data
+        ];
+        const atomOptions = {
+            1: ["C", "N", "O"], // Atom options for residue 1
+            2: ["CE", "NH1", "NH2"], // Atom options for residue 2
+            3: ["SG", "CA", "CZ"], // Atom options for residue 3
+            
+            // Add more as needed
+        };
+
+        const residueNumbersDistance = [1, 2]; // Update with appropriate residue numbers
+        const residueNumbersAngle = [1, 2, 3]; // Update with appropriate residue numbers
+
+        // Function to populate the residue dropdown based on calculation type
+        function populateResidueDropdown() {
+            const calculationType =
+            document.getElementById("calculationType").value;
+            const residueDropdown = document.getElementById("residueNumber");
+            residueDropdown.innerHTML = "";
+
+            const selectedResidues =
+            calculationType === "distance"
+                ? residueNumbersDistance
+                : residueNumbersAngle;
+
+            for (const residueNumber of selectedResidues) {
+            const option = document.createElement("option");
+            option.value = residueNumber;
+            option.text = `Residue ${residueNumber}`;
+            residueDropdown.appendChild(option);
+            }
+
+            // Trigger population of atom dropdown based on selected residue
+            const selectedResidue = residueDropdown.value;
+            populateAtomDropdown(selectedResidue);
+        }
+
+        // Function to populate the atom dropdown based on selected residue
+        function populateAtomDropdown(selectedResidue) {
+            const atomDropdown = document.getElementById("atomName");
+            atomDropdown.innerHTML = "";
+
+            const selectedAtomOptions = atomOptions[selectedResidue];
+
+            if (selectedAtomOptions) {
+            for (const atom of selectedAtomOptions) {
+                const option = document.createElement("option");
+                option.value = atom;
+                option.text = atom;
+                atomDropdown.appendChild(option);
+            }
+            }
+        }
+
+        // Event listeners
+        document
+            .getElementById("calculationType")
+            .addEventListener("change", () => {
+            populateResidueDropdown();
+            });
+
+        document
+            .getElementById("residueNumber")
+            .addEventListener("change", () => {
+            const selectedResidue =
+                document.getElementById("residueNumber").value;
+            populateAtomDropdown(selectedResidue);
+            });
+
+        document
+            .getElementById("calculateButton")
+            .addEventListener("click", () => {
+            const calculationType =
+                document.getElementById("calculationType").value;
+            const selectedResidue =
+                document.getElementById("residueNumber").value;
+            const selectedAtom = document.getElementById("atomName").value;
+
+            // Calculate based on the selected options and display the result
+            let resultText = "";
+
+            if (calculationType === "distance") {
+                resultText = `Distance calculation: Residue ${selectedResidue}, Atom ${selectedAtom}`;
+            } else if (calculationType === "angle") {
+                resultText = `Angle calculation: Residue ${selectedResidue}, Atom ${selectedAtom}`;
+            }
+
+            document.getElementById("result").textContent = resultText;
+            });
+        </script>
+    </body>
+    </html>
